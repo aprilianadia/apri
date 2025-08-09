@@ -1,0 +1,432 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kalkulator Matriks Bebas Ukuran</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <style>
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col items-center p-4">
+  <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Kalkulator Matriks Bebas Ukuran</h1>
+
+  <div class="w-full max-w-6xl bg-white rounded-lg shadow p-6 space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Matrix A -->
+      <div>
+        <h2 class="text-xl font-semibold mb-2 text-gray-700">Matriks A</h2>
+        <div class="flex flex-wrap gap-4 items-center mb-2">
+          <label for="rowsA" class="block text-gray-600 font-medium">Baris:</label>
+          <input
+            type="number"
+            id="rowsA"
+            min="1"
+            max="20"
+            value="2"
+            class="w-20 p-1 border border-gray-300 rounded text-center"
+            aria-label="Jumlah baris matriks A"
+          />
+          <label for="colsA" class="block text-gray-600 font-medium">Kolom:</label>
+          <input
+            type="number"
+            id="colsA"
+            min="1"
+            max="20"
+            value="2"
+            class="w-20 p-1 border border-gray-300 rounded text-center"
+            aria-label="Jumlah kolom matriks A"
+          />
+          <button
+            id="generateA"
+            class="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
+            aria-label="Buat matriks A"
+          >
+            Buat Matriks
+          </button>
+        </div>
+        <form id="matrixAForm" class="grid gap-2"></form>
+      </div>
+
+      <!-- Matrix B -->
+      <div>
+        <h2 class="text-xl font-semibold mb-2 text-gray-700">Matriks B</h2>
+        <div class="flex flex-wrap gap-4 items-center mb-2">
+          <label for="rowsB" class="block text-gray-600 font-medium">Baris:</label>
+          <input
+            type="number"
+            id="rowsB"
+            min="1"
+            max="20"
+            value="2"
+            class="w-20 p-1 border border-gray-300 rounded text-center"
+            aria-label="Jumlah baris matriks B"
+          />
+          <label for="colsB" class="block text-gray-600 font-medium">Kolom:</label>
+          <input
+            type="number"
+            id="colsB"
+            min="1"
+            max="20"
+            value="2"
+            class="w-20 p-1 border border-gray-300 rounded text-center"
+            aria-label="Jumlah kolom matriks B"
+          />
+          <button
+            id="generateB"
+            class="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
+            aria-label="Buat matriks B"
+          >
+            Buat Matriks
+          </button>
+        </div>
+        <form id="matrixBForm" class="grid gap-2"></form>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-4 justify-center">
+      <button
+        id="addBtn"
+        class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition flex items-center space-x-2"
+        aria-label="Tambah matriks A dan B"
+      >
+        <i class="fas fa-plus"></i><span>Tambah (A + B)</span>
+      </button>
+      <button
+        id="subtractBtn"
+        class="bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition flex items-center space-x-2"
+        aria-label="Kurangi matriks B dari A"
+      >
+        <i class="fas fa-minus"></i><span>Kurang (A - B)</span>
+      </button>
+      <button
+        id="multiplyBtn"
+        class="bg-purple-600 text-white px-5 py-2 rounded hover:bg-purple-700 transition flex items-center space-x-2"
+        aria-label="Kali matriks A dan B"
+      >
+        <i class="fas fa-times"></i><span>Kali (A × B)</span>
+      </button>
+      <button
+        id="transposeABtn"
+        class="bg-yellow-600 text-white px-5 py-2 rounded hover:bg-yellow-700 transition flex items-center space-x-2"
+        aria-label="Transpos matriks A"
+      >
+        <i class="fas fa-exchange-alt"></i><span>Transpos Matriks A</span>
+      </button>
+      <button
+        id="transposeBBtn"
+        class="bg-yellow-600 text-white px-5 py-2 rounded hover:bg-yellow-700 transition flex items-center space-x-2"
+        aria-label="Transpos matriks B"
+      >
+        <i class="fas fa-exchange-alt"></i><span>Transpos Matriks B</span>
+      </button>
+      <button
+        id="clearBtn"
+        class="bg-gray-600 text-white px-5 py-2 rounded hover:bg-gray-700 transition flex items-center space-x-2"
+        aria-label="Bersihkan semua input dan hasil"
+      >
+        <i class="fas fa-trash-alt"></i><span>Bersihkan</span>
+      </button>
+    </div>
+
+    <div>
+      <h2 class="text-xl font-semibold mb-2 text-gray-700">Hasil</h2>
+      <div
+        id="resultContainer"
+        class="overflow-auto border border-gray-300 rounded p-4 bg-gray-50 min-h-[120px]"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <p class="text-gray-500 text-center">Hasil akan muncul di sini</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Create matrix inputs dynamically with grid columns = cols
+    function createMatrixInputs(container, rows, cols, matrixId) {
+      container.innerHTML = "";
+      container.style.display = "grid";
+      container.style.gridTemplateColumns = `repeat(${cols}, minmax(50px, 1fr))`;
+      container.style.gap = "0.5rem";
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const input = document.createElement("input");
+          input.type = "number";
+          input.step = "any";
+          input.value = "0";
+          input.className =
+            "border border-gray-300 rounded p-1 text-center focus:outline-none focus:ring-2 focus:ring-blue-400";
+          input.id = `${matrixId}-${r}-${c}`;
+          input.setAttribute("aria-label", `Input matriks ${matrixId} baris ${r + 1} kolom ${c + 1}`);
+          container.appendChild(input);
+        }
+      }
+    }
+
+    // Read matrix values from inputs
+    function readMatrix(rows, cols, matrixId) {
+      const matrix = [];
+      for (let r = 0; r < rows; r++) {
+        const row = [];
+        for (let c = 0; c < cols; c++) {
+          const val = parseFloat(document.getElementById(`${matrixId}-${r}-${c}`).value);
+          row.push(isNaN(val) ? 0 : val);
+        }
+        matrix.push(row);
+      }
+      return matrix;
+    }
+
+    // Render matrix as HTML table
+    function renderMatrix(matrix) {
+      if (!matrix.length) return "<p class='text-gray-500 text-center'>Matriks kosong</p>";
+      let html = '<table class="table-auto mx-auto border-collapse border border-gray-400">';
+      for (const row of matrix) {
+        html += '<tr>';
+        for (const val of row) {
+          html += `<td class="border border-gray-300 px-3 py-1 text-center">${val}</td>`;
+        }
+        html += '</tr>';
+      }
+      html += '</table>';
+      return html;
+    }
+
+    // Matrix operations
+    function addMatrices(A, B) {
+      if (A.length !== B.length || A[0].length !== B[0].length) return null;
+      const rows = A.length;
+      const cols = A[0].length;
+      const result = [];
+      for (let r = 0; r < rows; r++) {
+        const row = [];
+        for (let c = 0; c < cols; c++) {
+          row.push(A[r][c] + B[r][c]);
+        }
+        result.push(row);
+      }
+      return result;
+    }
+
+    function subtractMatrices(A, B) {
+      if (A.length !== B.length || A[0].length !== B[0].length) return null;
+      const rows = A.length;
+      const cols = A[0].length;
+      const result = [];
+      for (let r = 0; r < rows; r++) {
+        const row = [];
+        for (let c = 0; c < cols; c++) {
+          row.push(A[r][c] - B[r][c]);
+        }
+        result.push(row);
+      }
+      return result;
+    }
+
+    function multiplyMatrices(A, B) {
+      if (A[0].length !== B.length) return null;
+      const rows = A.length;
+      const cols = B[0].length;
+      const result = [];
+      for (let r = 0; r < rows; r++) {
+        const row = [];
+        for (let c = 0; c < cols; c++) {
+          let sum = 0;
+          for (let k = 0; k < A[0].length; k++) {
+            sum += A[r][k] * B[k][c];
+          }
+          row.push(sum);
+        }
+        result.push(row);
+      }
+      return result;
+    }
+
+    function transposeMatrix(M) {
+      const rows = M.length;
+      const cols = M[0].length;
+      const result = [];
+      for (let c = 0; c < cols; c++) {
+        const row = [];
+        for (let r = 0; r < rows; r++) {
+          row.push(M[r][c]);
+        }
+        result.push(row);
+      }
+      return result;
+    }
+
+    // Elements
+    const rowsAInput = document.getElementById("rowsA");
+    const colsAInput = document.getElementById("colsA");
+    const generateABtn = document.getElementById("generateA");
+    const matrixAForm = document.getElementById("matrixAForm");
+
+    const rowsBInput = document.getElementById("rowsB");
+    const colsBInput = document.getElementById("colsB");
+    const generateBBtn = document.getElementById("generateB");
+    const matrixBForm = document.getElementById("matrixBForm");
+
+    const addBtn = document.getElementById("addBtn");
+    const subtractBtn = document.getElementById("subtractBtn");
+    const multiplyBtn = document.getElementById("multiplyBtn");
+    const transposeABtn = document.getElementById("transposeABtn");
+    const transposeBBtn = document.getElementById("transposeBBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    const resultContainer = document.getElementById("resultContainer");
+
+    // Initial generate matrices
+    function generateInitialMatrices() {
+      let rA = parseInt(rowsAInput.value);
+      let cA = parseInt(colsAInput.value);
+      let rB = parseInt(rowsBInput.value);
+      let cB = parseInt(colsBInput.value);
+
+      if (isNaN(rA) || rA < 1) rA = 1;
+      if (isNaN(cA) || cA < 1) cA = 1;
+      if (isNaN(rB) || rB < 1) rB = 1;
+      if (isNaN(cB) || cB < 1) cB = 1;
+
+      if (rA > 20) rA = 20;
+      if (cA > 20) cA = 20;
+      if (rB > 20) rB = 20;
+      if (cB > 20) cB = 20;
+
+      rowsAInput.value = rA;
+      colsAInput.value = cA;
+      rowsBInput.value = rB;
+      colsBInput.value = cB;
+
+      createMatrixInputs(matrixAForm, rA, cA, "A");
+      createMatrixInputs(matrixBForm, rB, cB, "B");
+      resultContainer.innerHTML = "<p class='text-gray-500 text-center'>Hasil akan muncul di sini</p>";
+    }
+
+    generateInitialMatrices();
+
+    // Generate matrix A inputs on button click
+    generateABtn.addEventListener("click", () => {
+      let rows = parseInt(rowsAInput.value);
+      let cols = parseInt(colsAInput.value);
+      if (isNaN(rows) || rows < 1) rows = 1;
+      if (isNaN(cols) || cols < 1) cols = 1;
+      if (rows > 20) rows = 20;
+      if (cols > 20) cols = 20;
+      rowsAInput.value = rows;
+      colsAInput.value = cols;
+      createMatrixInputs(matrixAForm, rows, cols, "A");
+      resultContainer.innerHTML = "<p class='text-gray-500 text-center'>Hasil akan muncul di sini</p>";
+    });
+
+    // Generate matrix B inputs on button click
+    generateBBtn.addEventListener("click", () => {
+      let rows = parseInt(rowsBInput.value);
+      let cols = parseInt(colsBInput.value);
+      if (isNaN(rows) || rows < 1) rows = 1;
+      if (isNaN(cols) || cols < 1) cols = 1;
+      if (rows > 20) rows = 20;
+      if (cols > 20) cols = 20;
+      rowsBInput.value = rows;
+      colsBInput.value = cols;
+      createMatrixInputs(matrixBForm, rows, cols, "B");
+      resultContainer.innerHTML = "<p class='text-gray-500 text-center'>Hasil akan muncul di sini</p>";
+    });
+
+    // Add matrices
+    addBtn.addEventListener("click", () => {
+      const rowsA = parseInt(rowsAInput.value);
+      const colsA = parseInt(colsAInput.value);
+      const rowsB = parseInt(rowsBInput.value);
+      const colsB = parseInt(colsBInput.value);
+
+      if (rowsA !== rowsB || colsA !== colsB) {
+        resultContainer.innerHTML =
+          '<p class="text-red-600 font-semibold text-center">Error: Matriks harus memiliki ukuran yang sama untuk penjumlahan.</p>';
+        return;
+      }
+
+      const A = readMatrix(rowsA, colsA, "A");
+      const B = readMatrix(rowsB, colsB, "B");
+      const result = addMatrices(A, B);
+      resultContainer.innerHTML = renderMatrix(result);
+    });
+
+    // Subtract matrices
+    subtractBtn.addEventListener("click", () => {
+      const rowsA = parseInt(rowsAInput.value);
+      const colsA = parseInt(colsAInput.value);
+      const rowsB = parseInt(rowsBInput.value);
+      const colsB = parseInt(colsBInput.value);
+
+      if (rowsA !== rowsB || colsA !== colsB) {
+        resultContainer.innerHTML =
+          '<p class="text-red-600 font-semibold text-center">Error: Matriks harus memiliki ukuran yang sama untuk pengurangan.</p>';
+        return;
+      }
+
+      const A = readMatrix(rowsA, colsA, "A");
+      const B = readMatrix(rowsB, colsB, "B");
+      const result = subtractMatrices(A, B);
+      resultContainer.innerHTML = renderMatrix(result);
+    });
+
+    // Multiply matrices
+    multiplyBtn.addEventListener("click", () => {
+      const rowsA = parseInt(rowsAInput.value);
+      const colsA = parseInt(colsAInput.value);
+      const rowsB = parseInt(rowsBInput.value);
+      const colsB = parseInt(colsBInput.value);
+
+      if (colsA !== rowsB) {
+        resultContainer.innerHTML =
+          '<p class="text-red-600 font-semibold text-center">Error: Kolom matriks A harus sama dengan baris matriks B untuk perkalian.</p>';
+        return;
+      }
+
+      const A = readMatrix(rowsA, colsA, "A");
+      const B = readMatrix(rowsB, colsB, "B");
+      const result = multiplyMatrices(A, B);
+      resultContainer.innerHTML = renderMatrix(result);
+    });
+
+    // Transpose matrix A
+    transposeABtn.addEventListener("click", () => {
+      const rowsA = parseInt(rowsAInput.value);
+      const colsA = parseInt(colsAInput.value);
+      const A = readMatrix(rowsA, colsA, "A");
+      const result = transposeMatrix(A);
+      resultContainer.innerHTML = renderMatrix(result);
+    });
+
+    // Transpose matrix B
+    transposeBBtn.addEventListener("click", () => {
+      const rowsB = parseInt(rowsBInput.value);
+      const colsB = parseInt(colsBInput.value);
+      const B = readMatrix(rowsB, colsB, "B");
+      const result = transposeMatrix(B);
+      resultContainer.innerHTML = renderMatrix(result);
+    });
+
+    // Clear all inputs and result
+    clearBtn.addEventListener("click", () => {
+      rowsAInput.value = 2;
+      colsAInput.value = 2;
+      rowsBInput.value = 2;
+      colsBInput.value = 2;
+      createMatrixInputs(matrixAForm, 2, 2, "A");
+      createMatrixInputs(matrixBForm, 2, 2, "B");
+      resultContainer.innerHTML = "<p class='text-gray-500 text-center'>Hasil akan muncul di sini</p>";
+    });
+  </script>
+</body>
+</html>
